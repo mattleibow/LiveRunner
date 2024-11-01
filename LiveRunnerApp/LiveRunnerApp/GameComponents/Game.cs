@@ -5,8 +5,12 @@ namespace LiveRunnerApp.GameComponents;
 public class Game
 {
     private const int _gamePadding = 48;
-    private const int _runSpeed = 20;
+    private const int _runSpeed = 500; // px per second
     private const int _laneCount = 3;
+    private const double _newSpriteTime = 0.333;
+
+    private long _lastUpdate;
+    private double _lastSpriteAdd;
 
     private SKPaint _linePaint = new()
     {
@@ -26,23 +30,42 @@ public class Game
         _sprites.Add(new Obstacle() { Lane = 2 });
     }
 
+    public void MovePlayer(MoveDirection direction)
+    {
+        if (direction == MoveDirection.Left && _player.Lane > 0)
+            _player.Lane--;
+        else if (direction == MoveDirection.Right && _player.Lane < _laneCount - 1)
+            _player.Lane++;
+        // TODO: add a beep sound if we move in a bad way
+    }
+
     public void Update(int width, int height)
     {
+        if (_lastUpdate == 0)
+            _lastUpdate = Environment.TickCount64;
+        var currentUpdate = Environment.TickCount64;
+        var deltaTime = (currentUpdate - _lastUpdate) / 1000.0;
+        _lastUpdate = currentUpdate;
+
+        SpawnNewObstacle(deltaTime);
+
         _laneWidth = width / _laneCount;
 
         // update sprites
-        foreach (var sprite in _sprites)
+        for (var i = _sprites.Count - 1; i >= 0; i--)
         {
-            // TODO: speed should not be directly added
-            //       and should be based on delta time
-            var newY = sprite.Location.Y + _runSpeed;
+            var sprite = _sprites[i];
+
+            var newY = sprite.Location.Y + (_runSpeed * deltaTime);
             sprite.Location = new(
                 _laneWidth * (sprite.Lane + 1) - _laneWidth / 2,
-                newY);
+                (float)newY);
 
-            // TODO: sprite has moved off the edge, so remove it
+            // sprite has moved off the edge, so remove it
             if (sprite.Location.Y > height)
-                sprite.Location = new(sprite.Location.X, 0);
+            {
+                _sprites.RemoveAt(i);
+            }
         }
 
         // update player
@@ -55,15 +78,6 @@ public class Game
     {
         canvas.Clear(SKColors.Green);
 
-        // draw temp lane lines
-        for (var i = 1; i < _laneCount; i++)
-        {
-            canvas.DrawLine(
-                _laneWidth * i, 0,
-                _laneWidth * i, height,
-                _linePaint);
-        }
-
         // draw sprites
         foreach (var sprite in _sprites)
         {
@@ -72,10 +86,20 @@ public class Game
 
         // draw player
         _player.Draw(canvas, width, height);
+    }
 
-        // draw temp padding line
-        canvas.DrawRect(
-            SKRect.Inflate(SKRect.Create(width, height), -_gamePadding, -_gamePadding),
-            _linePaint);
+    private void SpawnNewObstacle(double deltaTime)
+    {
+        _lastSpriteAdd += deltaTime;
+
+        // if we are still in the last add time, so bail out
+        if (_lastSpriteAdd <= _newSpriteTime)
+            return;
+        
+        // it has been X seconds since we added something, so add another
+        
+        _lastSpriteAdd = 0;
+
+        _sprites.Add(new Obstacle { Lane = Random.Shared.Next(3) });
     }
 }

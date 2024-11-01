@@ -49,4 +49,17 @@ public partial class MainPage : ContentPage
         _game.Update(e.Info.Width, e.Info.Height);
         _game.Draw(canvas, e.Info.Width, e.Info.Height);
     }
+
+    private void OnSwiped(object sender, SwipedEventArgs e)
+    {
+        switch (e.Direction)
+        {
+            case SwipeDirection.Left:
+                _game.MovePlayer(MoveDirection.Left);
+                break;
+            case SwipeDirection.Right:
+                _game.MovePlayer(MoveDirection.Right);
+                break;
+        }
+    }
 }
