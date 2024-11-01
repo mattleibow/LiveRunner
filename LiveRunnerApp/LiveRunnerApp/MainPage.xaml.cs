@@ -11,6 +11,8 @@ public partial class MainPage : ContentPage
     public MainPage()
     {
         InitializeComponent();
+
+        BindingContext = _game;
     }
 
     protected override void OnHandlerChanged()

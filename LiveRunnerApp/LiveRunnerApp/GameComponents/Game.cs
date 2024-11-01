@@ -1,8 +1,9 @@
-﻿using SkiaSharp;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using SkiaSharp;
 
 namespace LiveRunnerApp.GameComponents;
 
-public class Game
+public partial class Game : ObservableObject
 {
     private const int _gamePadding = 48;
     private const int _runSpeed = 500; // px per second
@@ -19,6 +20,15 @@ public class Game
     {
     }
 
+    [ObservableProperty]
+    private int _livesRemaining = 3;
+
+    [ObservableProperty]
+    private TimeSpan _timeElapsed;
+
+    [ObservableProperty]
+    private int _score;
+
     public void MovePlayer(MoveDirection direction)
     {
         if (direction == MoveDirection.Left && _player.Lane.Desired > 0)
@@ -30,7 +40,7 @@ public class Game
 
     public void Update(int width, int height)
     {
-        var deltaTime = GetDeltaTime();
+        var deltaTime = UpdateElapsedTime();
 
         SpawnNewObstacle(deltaTime);
 
@@ -92,7 +102,7 @@ public class Game
         _sprites.Add(new Obstacle { Lane = new(Random.Shared.Next(3)) });
     }
 
-    private double GetDeltaTime()
+    private double UpdateElapsedTime()
     {
         if (_lastUpdate == 0)
             _lastUpdate = Environment.TickCount;
@@ -101,6 +111,8 @@ public class Game
         var deltaTime = (currentUpdate - _lastUpdate) / 1000.0;
 
         _lastUpdate = currentUpdate;
+
+        TimeElapsed += TimeSpan.FromSeconds(deltaTime);
 
         return deltaTime;
     }

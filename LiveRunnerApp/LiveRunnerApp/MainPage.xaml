@@ -3,7 +3,9 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:skia="clr-namespace:SkiaSharp.Views.Maui.Controls;assembly=SkiaSharp.Views.Maui.Controls"
+    xmlns:game="clr-namespace:LiveRunnerApp.GameComponents"
     x:Class="LiveRunnerApp.MainPage"
+    x:DataType="game:Game"
     Shell.NavBarIsVisible="False"
     >
 
@@ -32,7 +34,7 @@
             Style="{StaticResource DashboardHeader}" />
         <Label
             Grid.Row="1"
-            Text="###"
+            Text="{Binding Score}"
             Style="{StaticResource DashboardValue}" />
 
         <!-- LIVES -->
@@ -43,7 +45,7 @@
         <Label
             Grid.Column="1"
             Grid.Row="1"
-            Text="3"
+            Text="{Binding LivesRemaining}"
             Style="{StaticResource DashboardValue}" />
 
         <!-- TIME -->
@@ -54,7 +56,7 @@
         <Label
             Grid.Column="2"
             Grid.Row="1"
-            Text="00:00"
+            Text="{Binding TimeElapsed}"
             Style="{StaticResource DashboardValue}" />
 
         <!-- GAME -->

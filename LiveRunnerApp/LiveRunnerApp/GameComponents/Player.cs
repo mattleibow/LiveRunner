@@ -6,7 +6,7 @@ class Player : Sprite
 {
     public Player()
     {
-        Lane.Duration = 0.5;
+        Lane.Duration = 0.3;
         Lane.Easing = Easing.SpringOut;        
     }
 
