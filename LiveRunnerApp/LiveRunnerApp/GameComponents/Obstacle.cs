@@ -6,13 +6,14 @@ class Obstacle : Sprite
 {
     public Obstacle()
     {
+        Shape = new SKRegion(new SKRectI(-15, -15, 15, 15));
     }
 
     public override void Draw(SKCanvas canvas, int width, int height)
     {
         base.Draw(canvas, width, height);
-    
+
         // TODO: use a real sprite
-        canvas.DrawCircle(Location, 15, new());
+        canvas.DrawCircle(Origin, 15, new());
     }
 }

@@ -7,7 +7,9 @@ class Player : Sprite
     public Player()
     {
         Lane.Duration = 0.3;
-        Lane.Easing = Easing.SpringOut;        
+        Lane.Easing = Easing.SpringOut;
+
+        Shape = new SKRegion(new SKRectI(-20, -20, 20, 20));
     }
 
     public override void Draw(SKCanvas canvas, int width, int height)
@@ -15,6 +17,6 @@ class Player : Sprite
         base.Draw(canvas, width, height);
 
         // TODO: use a real sprite
-        canvas.DrawCircle(Location, 20, new() { Color = SKColors.Blue });
+        canvas.DrawCircle(Origin, 20, new() { Color = SKColors.Blue });
     }
 }

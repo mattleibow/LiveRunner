@@ -46,31 +46,47 @@ public partial class Game : ObservableObject
 
         var laneWidth = width / _laneCount;
 
-        // update sprites
+        // update sprite locations
         for (var i = _sprites.Count - 1; i >= 0; i--)
         {
             var sprite = _sprites[i];
 
             sprite.Update(deltaTime);
 
-            var newY = sprite.Location.Y + (_runSpeed * deltaTime);
-            sprite.Location = new(
+            var newY = sprite.Origin.Y + (_runSpeed * deltaTime);
+            sprite.Origin = new(
                 (int)(laneWidth * (sprite.Lane.Current + 1)) - laneWidth / 2,
                 (float)newY);
 
             // sprite has moved off the edge, so remove it
-            if (sprite.Location.Y > height)
+            if (sprite.Origin.Y > height)
             {
                 _sprites.RemoveAt(i);
             }
         }
 
-        // update player
+        // update player location
         _player.Update(deltaTime);
 
-        _player.Location = new(
+        _player.Origin = new(
             (int)(laneWidth * (_player.Lane.Current + 1)) - laneWidth / 2,
             height - _gamePadding);
+
+        // detect any collisions
+        for (var i = _sprites.Count - 1; i >= 0; i--)
+        {
+            var sprite = _sprites[i];
+
+            if (sprite.Overlaps(_player))
+            {
+                if (sprite is Obstacle)
+                {
+                    LivesRemaining--;
+                }
+
+                _sprites.RemoveAt(i);
+            }
+        }
     }
 
     public void Draw(SKCanvas canvas, int width, int height)
