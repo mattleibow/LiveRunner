@@ -42,7 +42,7 @@ public partial class Game : ObservableObject
     {
         var deltaTime = UpdateElapsedTime();
 
-        SpawnNewObstacle(deltaTime);
+        SpawnNewSprite(deltaTime);
 
         var laneWidth = width / _laneCount;
 
@@ -83,6 +83,10 @@ public partial class Game : ObservableObject
                 {
                     LivesRemaining--;
                 }
+                else if (sprite is Reward)
+                {
+                    Score++;
+                }
 
                 _sprites.RemoveAt(i);
             }
@@ -103,7 +107,7 @@ public partial class Game : ObservableObject
         _player.Draw(canvas, width, height);
     }
 
-    private void SpawnNewObstacle(double deltaTime)
+    private void SpawnNewSprite(double deltaTime)
     {
         _lastSpriteAdd += deltaTime;
 
@@ -115,7 +119,10 @@ public partial class Game : ObservableObject
 
         _lastSpriteAdd = 0;
 
-        _sprites.Add(new Obstacle { Lane = new(Random.Shared.Next(3)) });
+        if (Random.Shared.Next(2) == 0)
+            _sprites.Add(new Reward { Lane = new(Random.Shared.Next(3)) });
+        else
+            _sprites.Add(new Obstacle { Lane = new(Random.Shared.Next(3)) });
     }
 
     private double UpdateElapsedTime()
