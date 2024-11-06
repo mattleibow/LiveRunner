@@ -6,8 +6,8 @@ namespace LiveRunnerApp.GameComponents;
 public class Sprite
 {
     private SKPoint _origin;
-    private SKRegion? _shape;
-    private SKRegion? _shapeAtOrigin;
+    private SKRegion? _collisionRegion;
+    private SKRegion? _collisionRegionAtOrigin;
 
     public AnimatedValue<double> Lane { get; set; } = new(0);
 
@@ -17,33 +17,33 @@ public class Sprite
         set
         {
             _origin = value;
-            _shapeAtOrigin?.Dispose();
-            _shapeAtOrigin = null;
+            _collisionRegionAtOrigin?.Dispose();
+            _collisionRegionAtOrigin = null;
         }
     }
 
-    public SKRegion? Shape
+    public SKRegion? CollisionRegion
     {
-        get => _shape;
+        get => _collisionRegion;
         set
         {
-            _shape = value;
-            _shapeAtOrigin?.Dispose();
-            _shapeAtOrigin = null;
+            _collisionRegion = value;
+            _collisionRegionAtOrigin?.Dispose();
+            _collisionRegionAtOrigin = null;
         }
     }
 
-    public SKRegion ShapeAtOrigin
+    public SKRegion CollisionRegionAtOrigin
     {
         get
         {
-            if (_shapeAtOrigin is null)
+            if (_collisionRegionAtOrigin is null)
             {
-                var atOrigin = new SKRegion(Shape);
+                var atOrigin = new SKRegion(CollisionRegion);
                 atOrigin.Translate((int)Origin.X, (int)Origin.Y);
-                _shapeAtOrigin = atOrigin;
+                _collisionRegionAtOrigin = atOrigin;
             }
-            return _shapeAtOrigin;
+            return _collisionRegionAtOrigin;
         }
     }
 
@@ -58,13 +58,13 @@ public class Sprite
 
     public virtual bool Overlaps(Sprite sprite)
     {
-        if (Shape is null || sprite.Shape is null)
+        if (CollisionRegion is null || sprite.CollisionRegion is null)
             return false;
 
         //var shapeBounds = (SKRect)Shape.Bounds;
         //shapeBounds.Offset(Origin);
 
-        if (ShapeAtOrigin.Intersects(sprite.ShapeAtOrigin))
+        if (CollisionRegionAtOrigin.Intersects(sprite.CollisionRegionAtOrigin))
             return true;
 
         return false;

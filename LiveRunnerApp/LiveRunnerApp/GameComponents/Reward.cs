@@ -6,7 +6,7 @@ class Reward : Sprite
 {
     public Reward()
     {
-        Shape = new SKRegion(new SKRectI(-15, -15, 15, 15));
+        CollisionRegion = new SKRegion(new SKRectI(-15, -15, 15, 15));
     }
 
     public override void Draw(SKCanvas canvas, int width, int height)

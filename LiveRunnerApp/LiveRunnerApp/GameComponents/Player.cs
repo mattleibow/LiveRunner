@@ -9,7 +9,7 @@ class Player : Sprite
         Lane.Duration = 0.3;
         Lane.Easing = Easing.SpringOut;
 
-        Shape = new SKRegion(new SKRectI(-20, -20, 20, 20));
+        CollisionRegion = new SKRegion(new SKRectI(-20, -20, 20, 20));
     }
 
     public override void Draw(SKCanvas canvas, int width, int height)
