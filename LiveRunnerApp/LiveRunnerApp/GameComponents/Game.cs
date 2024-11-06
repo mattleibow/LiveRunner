@@ -10,6 +10,8 @@ public partial class Game : ObservableObject
     private const int _laneCount = 3;
     private const double _newSpriteTime = 0.333;
 
+    private bool _isGameOver;
+
     private int _lastUpdate;
     private double _lastSpriteAdd;
 
@@ -29,8 +31,22 @@ public partial class Game : ObservableObject
     [ObservableProperty]
     private int _score;
 
+    public event EventHandler? GameOver;
+
+    partial void OnLivesRemainingChanged(int value)
+    {
+        if (value == 0)
+        {
+            _isGameOver = true;
+            GameOver?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
     public void MovePlayer(MoveDirection direction)
     {
+        if (_isGameOver)
+            return;
+
         if (direction == MoveDirection.Left && _player.Lane.Desired > 0)
             _player.Lane.Desired--;
         else if (direction == MoveDirection.Right && _player.Lane.Desired < _laneCount - 1)
@@ -40,6 +56,9 @@ public partial class Game : ObservableObject
 
     public void Update(int width, int height)
     {
+        if (_isGameOver)
+            return;
+
         var deltaTime = UpdateElapsedTime();
 
         SpawnNewSprite(deltaTime);

@@ -1,10 +1,11 @@
-﻿namespace LiveRunnerApp
+﻿namespace LiveRunnerApp;
+
+public partial class AppShell : Shell
 {
-    public partial class AppShell : Shell
+    public AppShell()
     {
-        public AppShell()
-        {
-            InitializeComponent();
-        }
+        InitializeComponent();
+
+        Routing.RegisterRoute("game", typeof(GamePage));
     }
 }

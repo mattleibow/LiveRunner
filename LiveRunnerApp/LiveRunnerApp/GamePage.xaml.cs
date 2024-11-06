@@ -1,18 +1,21 @@
-﻿using LiveRunnerApp.GameComponents;
+﻿using CommunityToolkit.Maui.Views;
+using LiveRunnerApp.GameComponents;
 using SkiaSharp.Views.Maui;
 
 namespace LiveRunnerApp;
 
-public partial class MainPage : ContentPage
+public partial class GamePage : ContentPage
 {
     private IDispatcherTimer? _timer;
     private Game _game = new();
 
-    public MainPage()
+    public GamePage()
     {
         InitializeComponent();
 
         BindingContext = _game;
+
+        _game.GameOver += OnGameOver;
     }
 
     protected override void OnHandlerChanged()
@@ -63,5 +66,10 @@ public partial class MainPage : ContentPage
                 _game.MovePlayer(MoveDirection.Right);
                 break;
         }
+    }
+
+    private async void OnGameOver(object? sender, EventArgs e)
+    {
+        await this.ShowPopupAsync(new GameOverPopup());
     }
 }

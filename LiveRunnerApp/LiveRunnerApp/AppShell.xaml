@@ -8,8 +8,13 @@
     Title="LiveRunnerApp">
 
     <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+        Title="Main Menu"
+        ContentTemplate="{DataTemplate local:MainMenuPage}"
+        Route="menu" />
+
+    <!--<ShellContent
+        Title="PLAY"
+        ContentTemplate="{DataTemplate local:GamePage}"
+        Route="game" />-->
 
 </Shell>
