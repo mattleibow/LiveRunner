@@ -12,11 +12,9 @@ class Player : Sprite
         CollisionRegion = new SKRegion(new SKRectI(-20, -20, 20, 20));
     }
 
-    public override void Draw(SKCanvas canvas, int width, int height)
-    {
-        base.Draw(canvas, width, height);
+    public override SKImage? Asset => AssetManager.Default[GameAssets.Player];
 
-        // TODO: use a real sprite
-        canvas.DrawCircle(Origin, 20, new() { Color = SKColors.Blue });
-    }
+    public override float AssetScale => 0.6f;
+
+    public override SKPoint OriginOffset => new(-300, -600);
 }

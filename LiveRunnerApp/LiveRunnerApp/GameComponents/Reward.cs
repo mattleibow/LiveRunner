@@ -9,11 +9,9 @@ class Reward : Sprite
         CollisionRegion = new SKRegion(new SKRectI(-15, -15, 15, 15));
     }
 
-    public override void Draw(SKCanvas canvas, int width, int height)
-    {
-        base.Draw(canvas, width, height);
+    public override SKImage? Asset => AssetManager.Default[GameAssets.Bottle];
 
-        // TODO: use a real sprite
-        canvas.DrawCircle(Origin, 15, new() { Color = SKColors.Gold });
-    }
+    public override float AssetScale => 0.4f;
+
+    public override SKPoint OriginOffset => new(-128, -416);
 }

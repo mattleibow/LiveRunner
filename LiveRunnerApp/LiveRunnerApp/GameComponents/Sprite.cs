@@ -47,13 +47,29 @@ public class Sprite
         }
     }
 
+    public virtual SKImage? Asset { get; }
+
+    public virtual float AssetScale { get; }
+
+    public virtual SKPoint OriginOffset { get; }
+
     public virtual void Update(double deltaTime)
     {
         Lane.Update(deltaTime);
     }
 
-    public virtual void Draw(SKCanvas canvas, int width, int height)
+    public virtual void Draw(SKCanvas canvas, int width, int height, SKMatrix44 transform)
     {
+        if (Asset is null)
+            return;
+
+        var coord = transform.MapPoint(Origin);
+
+        canvas.Translate(coord);
+        canvas.Scale(AssetScale);
+        canvas.Translate(OriginOffset);
+
+        canvas.DrawImage(Asset, SKPoint.Empty);
     }
 
     public virtual bool Overlaps(Sprite sprite)

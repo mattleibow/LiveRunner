@@ -4,8 +4,12 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:local="clr-namespace:LiveRunnerApp"
-    Shell.FlyoutBehavior="Disabled"
     Title="LiveRunnerApp">
+
+    <ShellContent
+        Title="PLAY"
+        ContentTemplate="{DataTemplate local:GamePage}"
+        Route="game" />
 
     <ShellContent
         Title="Sandbox"
@@ -16,10 +20,5 @@
         Title="Main Menu"
         ContentTemplate="{DataTemplate local:MainMenuPage}"
         Route="menu" />
-
-    <!--<ShellContent
-        Title="PLAY"
-        ContentTemplate="{DataTemplate local:GamePage}"
-        Route="game" />-->
 
 </Shell>
