@@ -8,7 +8,7 @@ public partial class Game : ObservableObject
     /// <summary>
     /// The base running speed in pixels per second (px/s).
     /// </summary>
-    private const int _runSpeed = 500;
+    private const int _runSpeed = 600;
 
     /// <summary>
     /// The number of lanes.
@@ -46,11 +46,6 @@ public partial class Game : ObservableObject
     private bool _isGameOver;
 
     /// <summary>
-    /// HACK: The last time we added a sprite.
-    /// </summary>
-    private double _lastSpriteAdd;
-
-    /// <summary>
     /// The offset to animate the moving floor.
     /// </summary>
     private float _floorOffset = 0;
@@ -79,11 +74,23 @@ public partial class Game : ObservableObject
     [ObservableProperty]
     private int _score;
 
+    private readonly Chunk[] _availableChunks =
+    [
+        GameChunks.Empty,
+        GameChunks.RightLaneBlockedWithObstacle,
+        GameChunks.CenterLaneBlockedWithObstacle,
+        GameChunks.LeftLaneBlockedWithObstacle,
+        GameChunks.LeftAndRightLaneBlockedWithObstacle,
+        GameChunks.PlayingCard3Variation1,
+        GameChunks.PlayingCard3Variation2,
+        GameChunks.ChicaneLeft,
+        GameChunks.ChicaneRight,
+    ];
+
     public event EventHandler? GameOver;
 
     public void RestartGame()
     {
-        _lastSpriteAdd = 0;
         _sprites.Clear();
 
         _floorOffset = 0;
@@ -148,11 +155,7 @@ public partial class Game : ObservableObject
         _visibleFloorLength = -topLeftCoordinate.Y;
 
         // spawn a new sprite if we need to
-        var newSprite = SpawnNewSprite(deltaTime);
-        if (newSprite is not null)
-        {
-            newSprite.Origin = new(0, -_visibleFloorLength);
-        }
+        SpawnNewSprite(deltaTime);
 
         // update sprite locations
         for (var i = _sprites.Count - 1; i >= 0; i--)
@@ -215,7 +218,7 @@ public partial class Game : ObservableObject
 
         canvas.Clear(SKColors.Green);
 
-        // DEBUG: zoom out and draw the window border
+        //// DEBUG: zoom out and draw the window border
         //canvas.Scale(0.5f, 0.5f, width / 2, height / 2);
         //canvas.DrawRect(0, 0, width, height, new() { Style = SKPaintStyle.Stroke });
 
@@ -233,7 +236,7 @@ public partial class Game : ObservableObject
         {
             // apply the 2.5D transformation
             canvas.Concat(_isometricMatrix);
-            
+
             // animate the floor
             canvas.Translate(0, _floorOffset);
 
@@ -258,23 +261,83 @@ public partial class Game : ObservableObject
         }
     }
 
-    private Sprite? SpawnNewSprite(double deltaTime)
+    private SpriteKind[]? _lastChunkRow;
+
+    private void SpawnNewSprite(double deltaTime)
     {
-        _lastSpriteAdd += deltaTime;
+        if (_sprites.Count > 0)
+        {
+            // find the furthest sprite that was added before
+            var furthestSprite = _sprites.Min(s => s.Origin.Y);
 
-        // if we are still in the last add time, so bail out
-        if (_lastSpriteAdd <= _newSpriteTime)
-            return null;
+            // if the furthest sprite is still off the screen, do nothing
+            if (furthestSprite < -(_visibleFloorLength - _tileSize))
+                return;
+        }
 
-        // it has been X seconds since we added something, so add another
+        // the furthest sprite is on screen, so we need to
+        // add a new chunk of sprites
 
-        _lastSpriteAdd = 0;
+        var nextChunks = _availableChunks
+            .Where(chunk =>
+            {
+                // if there was no last chunk, then we can use any chunk
+                if (_lastChunkRow is null)
+                    return true;
 
-        Sprite sprite;
-        if (Random.Shared.Next(2) == 0)
-            _sprites.Add(sprite = new Reward { Lane = new(Random.Shared.Next(3)) });
-        else
-            _sprites.Add(sprite = new Obstacle { Lane = new(Random.Shared.Next(3)) });
-        return sprite;
+                // for each lane, check to see if it was empty and
+                // if it was, then we need to make sure that at least one of the lanes
+                // in the the new chunk also has an empty lane in the same spot
+                for (var laneNumber = 0; laneNumber < _lastChunkRow.Length; laneNumber++)
+                {
+                    var sprite = _lastChunkRow[laneNumber];
+
+                    if (sprite == SpriteKind.None &&
+                        chunk.Sprites[laneNumber][0] == sprite)
+                    {
+                        return true;
+                    }
+                }
+
+                // there were no matching open lanes, so we can't use this chunk
+                return false;
+            })
+            .ToArray();
+
+        var nextChunk = nextChunks[Random.Shared.Next(nextChunks.Length)];
+
+        _lastChunkRow = new SpriteKind[_laneCount];
+
+        for (var laneNumber = 0; laneNumber < nextChunk.Sprites.Length; laneNumber++)
+        {
+            var lane = nextChunk.Sprites[laneNumber];
+
+            for (var spriteNumber = 0; spriteNumber < lane.Length; spriteNumber++)
+            {
+                var spriteKind = lane[spriteNumber];
+
+                // create the sprite
+                var sprite = spriteKind switch
+                {
+                    SpriteKind.Reward => new Reward(),
+                    SpriteKind.Obstacle => new Obstacle(),
+                    _ => (Sprite?)null
+                };
+
+                // track the last sprite in each lane
+                if (spriteNumber == lane.Length - 1)
+                {
+                    _lastChunkRow[laneNumber] = spriteKind;
+                }
+
+                if (sprite is null)
+                    continue;
+
+                sprite.Lane = new(laneNumber);
+                sprite.Origin = new(0, -_visibleFloorLength - (spriteNumber * _tileSize));
+
+                _sprites.Add(sprite);
+            }
+        }
     }
 }

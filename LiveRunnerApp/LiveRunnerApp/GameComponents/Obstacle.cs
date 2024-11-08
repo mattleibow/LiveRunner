@@ -11,7 +11,7 @@ class Obstacle : Sprite
 
     public override SKImage? Asset => AssetManager.Default[GameAssets.Bottle];
 
-    public override float AssetScale => 0.4f;
+    public override float AssetScale => 0.5f;
 
     public override SKPoint OriginOffset => new(-128, -416);
 }
