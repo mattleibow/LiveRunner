@@ -63,12 +63,19 @@ public class Sprite
         if (Asset is null)
             return;
 
-        var coord = transform.MapPoint(Origin);
+        using var _ = new SKAutoCanvasRestore(canvas);
 
+        // move canvas origin to sprite origin
+        var coord = transform.MapPoint(Origin);
         canvas.Translate(coord);
+
+        // scale sprite
         canvas.Scale(AssetScale);
+
+        // offset the sprite so that the "center of mass" is at the origin
         canvas.Translate(OriginOffset);
 
+        // draw the sprite at the transformed canvas origin
         canvas.DrawImage(Asset, SKPoint.Empty);
     }
 
