@@ -325,11 +325,14 @@ public partial class Game : ObservableObject
 
         var nextChunk = _chunkManager.PickNextChunk();
 
-        var debugSprite = DebugOptions.DrawChunkNames
-            ? new DebugSprite(nextChunk.Name ?? "<null chunk>")
-            : null;
-
-        _sprites.Add(debugSprite);
+        // DEBUG: draw names at the start of each chunk
+        if (DebugOptions.DrawChunkNames)
+        {
+            var debugSprite = new DebugSprite(nextChunk.Name ?? "<null chunk>");
+            debugSprite.Lane = new(LaneCount);
+            debugSprite.Origin = new(0, -_visibleFloorLength);
+            _sprites.Add(debugSprite);
+        }
 
         // add the sprites to the game, starting from the first sprite
         // in the nearest lane (because we draw backwards)
