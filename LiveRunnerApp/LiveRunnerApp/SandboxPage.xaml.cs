@@ -1,5 +1,5 @@
 using LiveRunnerApp.Controls;
-using LiveRunnerApp.GameComponents;
+using LiveRunnerEngine;
 using SkiaSharp;
 
 namespace LiveRunnerApp;
@@ -21,8 +21,6 @@ public partial class SandboxPage : ContentPage
 
         _bottleOffset += 30;
         _bottleOffset = _bottleOffset % (256 * 10);
-
-
     }
 
     private void OnFrameDraw(object sender, GameSurfacePaintEventArgs e)
@@ -61,7 +59,7 @@ public partial class SandboxPage : ContentPage
             {
                 for (var lane = laneStart; lane <= laneEnd; lane += tileSize)
                 {
-                    canvas.DrawImage(AssetManager.Default[GameAssets.FloorBoards], lane, dist, paint);
+                    canvas.DrawImage(AssetManager.Default[Assets.FloorBoards], lane, dist, paint);
                 }
             }
         }
@@ -73,7 +71,7 @@ public partial class SandboxPage : ContentPage
             var iso = matrix.MapPoint(0, (_bottleOffset - (256 * 10)) / scale);
             canvas.Scale(scale);
             canvas.Translate(-128, -416);
-            canvas.DrawImage(AssetManager.Default[GameAssets.Bottle], iso, paint);
+            canvas.DrawImage(AssetManager.Default[Assets.Bottle], iso, paint);
         }
 
         // draw bottle
@@ -85,7 +83,7 @@ public partial class SandboxPage : ContentPage
 
             canvas.Scale(scale);
             canvas.Translate(-300, -600);
-            canvas.DrawImage(AssetManager.Default[GameAssets.Player], iso, paint);
+            canvas.DrawImage(AssetManager.Default[Assets.Player], iso, paint);
         }
     }
 }

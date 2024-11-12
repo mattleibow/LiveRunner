@@ -1,7 +1,7 @@
 ﻿using Microsoft.Maui.Layouts;
 using SkiaSharp;
 
-namespace LiveRunnerApp.GameComponents;
+namespace LiveRunnerEngine;
 
 public class Sprite
 {
@@ -49,7 +49,7 @@ public class Sprite
 
     public virtual SKImage? Asset { get; }
 
-    public virtual float AssetScale { get; }
+    public virtual float AssetScale { get; } = 1.0f;
 
     public virtual SKPoint OriginOffset { get; }
 
@@ -60,8 +60,15 @@ public class Sprite
 
     public virtual void Draw(SKCanvas canvas, int width, int height, SKMatrix44 transform)
     {
-        if (Asset is null)
-            return;
+        //// TODO: draw the shadow
+        //using (new SKAutoCanvasRestore(canvas))
+        //{
+        //    canvas.Concat(transform);
+        //    canvas.Translate(Origin);
+        //    canvas.Scale(AssetScale);
+        //    canvas.Translate(OriginOffset);
+        //    canvas.DrawImage(Asset, SKPoint.Empty);
+        //}
 
         using var _ = new SKAutoCanvasRestore(canvas);
 
@@ -76,6 +83,14 @@ public class Sprite
         canvas.Translate(OriginOffset);
 
         // draw the sprite at the transformed canvas origin
+        DrawAsset(canvas, width, height);
+    }
+
+    protected virtual void DrawAsset(SKCanvas canvas, int width, int height)
+    {
+        if (Asset is null)
+            return;
+
         canvas.DrawImage(Asset, SKPoint.Empty);
     }
 

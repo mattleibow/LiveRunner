@@ -1,6 +1,6 @@
 ﻿using SkiaSharp;
 
-namespace LiveRunnerApp.GameComponents;
+namespace LiveRunnerEngine;
 
 class Reward : Sprite
 {
@@ -9,7 +9,7 @@ class Reward : Sprite
         CollisionRegion = new SKRegion(new SKRectI(-15, -15, 15, 15));
     }
 
-    public override SKImage? Asset => AssetManager.Default[GameAssets.Bottle];
+    public override SKImage? Asset => AssetManager.Default[Assets.Bottle];
 
     public override float AssetScale => 0.4f;
 

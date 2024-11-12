@@ -1,6 +1,6 @@
 ﻿using SkiaSharp;
 
-namespace LiveRunnerApp.GameComponents;
+namespace LiveRunnerEngine;
 
 public class AssetManager
 {
@@ -23,9 +23,9 @@ public class AssetManager
 
     public async Task LoadAssets()
     {
-        await LoadImageAsset(GameAssets.FloorBoards);
-        await LoadImageAsset(GameAssets.Bottle);
-        await LoadImageAsset(GameAssets.Player);
+        await LoadImageAsset(Assets.FloorBoards);
+        await LoadImageAsset(Assets.Bottle);
+        await LoadImageAsset(Assets.Player);
 
         IsLoaded = true;
     }

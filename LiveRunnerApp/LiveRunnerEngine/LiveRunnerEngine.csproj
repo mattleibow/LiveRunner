@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<UseMaui>true</UseMaui>
+		<UseMauiCompat>false</UseMauiCompat>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.Maui.Controls" Version="8.0.93" />
+		<PackageReference Include="SkiaSharp" Version="3.118.0-preview.1.2" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0-preview1" />
+	</ItemGroup>
+
+</Project>

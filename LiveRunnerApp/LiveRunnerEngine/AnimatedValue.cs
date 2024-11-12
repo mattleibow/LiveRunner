@@ -1,6 +1,6 @@
 ﻿using Microsoft.Maui.Animations;
 
-namespace LiveRunnerApp.GameComponents;
+namespace LiveRunnerEngine;
 
 public class AnimatedValue<T>
     where T : notnull

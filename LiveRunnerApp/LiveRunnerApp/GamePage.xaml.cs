@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui.Views;
-using LiveRunnerApp.GameComponents;
+using LiveRunnerApp.Controls;
+using LiveRunnerEngine;
 
 namespace LiveRunnerApp;
 
@@ -18,15 +19,10 @@ public partial class GamePage : ContentPage
 
     private void OnSwiped(object sender, SwipedEventArgs e)
     {
-        switch (e.Direction)
-        {
-            case SwipeDirection.Left:
-                _game.MovePlayer(MoveDirection.Left);
-                break;
-            case SwipeDirection.Right:
-                _game.MovePlayer(MoveDirection.Right);
-                break;
-        }
+        if (e.Direction.HasFlag(SwipeDirection.Left))
+            _game.MovePlayer(MoveDirection.Left);
+        else if (e.Direction.HasFlag(SwipeDirection.Right))
+            _game.MovePlayer(MoveDirection.Right);
     }
 
     private async void OnGameOver(object? sender, EventArgs e)
@@ -36,13 +32,27 @@ public partial class GamePage : ContentPage
         //await this.ShowPopupAsync(new GameOverPopup());
     }
 
-    private void OnFrameUpdate(object sender, Controls.GameSurfaceUpdatedEventArgs e)
+    private void OnFrameUpdate(object sender, GameSurfaceUpdatedEventArgs e)
     {
         _game.Update(e.DeltaTime, e.Size.Width, e.Size.Height);
     }
 
-    private void OnFrameDraw(object sender, Controls.GameSurfacePaintEventArgs e)
+    private void OnFrameDraw(object sender, GameSurfacePaintEventArgs e)
     {
         _game.Draw(e.Canvas, e.Size.Width, e.Size.Height);
+    }
+
+    private void OnTapped(object sender, TappedEventArgs e)
+    {
+        var relative = e.GetPosition(gameSurface);
+        if (relative?.X is not { } x)
+            return;
+
+        var width = gameSurface.Width;
+
+        if (x < width * 0.3333)
+            _game.MovePlayer(MoveDirection.Left);
+        else if (x > width * 0.6667)
+            _game.MovePlayer(MoveDirection.Right);
     }
 }

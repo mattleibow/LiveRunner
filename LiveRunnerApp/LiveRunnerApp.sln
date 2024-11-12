@@ -3,7 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35327.3
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiveRunnerApp", "LiveRunnerApp\LiveRunnerApp.csproj", "{4AF444F0-813C-46E2-82D4-7C4BADA5CFE8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LiveRunnerApp", "LiveRunnerApp\LiveRunnerApp.csproj", "{4AF444F0-813C-46E2-82D4-7C4BADA5CFE8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiveRunnerEngine", "LiveRunnerEngine\LiveRunnerEngine.csproj", "{EF2BE642-306A-4D33-8F9A-792CD27638C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LiveRunnerEngine.Tests", "LiveRunnerEngine.Tests\LiveRunnerEngine.Tests.csproj", "{53D19FFD-3A79-47EE-A1CE-7C180E0B28EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,6 +21,14 @@ Global
 		{4AF444F0-813C-46E2-82D4-7C4BADA5CFE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4AF444F0-813C-46E2-82D4-7C4BADA5CFE8}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4AF444F0-813C-46E2-82D4-7C4BADA5CFE8}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{EF2BE642-306A-4D33-8F9A-792CD27638C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF2BE642-306A-4D33-8F9A-792CD27638C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF2BE642-306A-4D33-8F9A-792CD27638C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF2BE642-306A-4D33-8F9A-792CD27638C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53D19FFD-3A79-47EE-A1CE-7C180E0B28EA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53D19FFD-3A79-47EE-A1CE-7C180E0B28EA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53D19FFD-3A79-47EE-A1CE-7C180E0B28EA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53D19FFD-3A79-47EE-A1CE-7C180E0B28EA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

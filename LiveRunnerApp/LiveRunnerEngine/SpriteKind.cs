@@ -1,4 +1,4 @@
-﻿namespace LiveRunnerApp.GameComponents;
+﻿namespace LiveRunnerEngine;
 
 public enum SpriteKind
 {
